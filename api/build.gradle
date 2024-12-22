@@ -1,0 +1,7 @@
+tasks.named('bootJar') {
+    enabled = false
+}
+
+dependencies {
+    implementation project(':core')
+}

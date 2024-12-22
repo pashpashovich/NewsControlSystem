@@ -1,0 +1,6 @@
+rootProject.name = 'news_service'
+include 'api'
+include 'core'
+project(':core').projectDir = file('core')
+project(':api').projectDir = file('api')
+

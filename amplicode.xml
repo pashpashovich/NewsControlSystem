@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AmplicodePersistenceUnitSettings">
+    <persistence-units>
+      <persistence-unit moduleName="news_service.main" name="Default">
+        <packages>
+          <package value="ru.clevertec.news_service" />
+        </packages>
+      </persistence-unit>
+      <persistence-unit moduleName="news_service.core.main" name="Default" />
+      <persistence-unit moduleName="news_service.api.main" name="Default" />
+    </persistence-units>
+  </component>
+</project>

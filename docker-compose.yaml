@@ -1,0 +1,9 @@
+services:
+  db-news:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: news_user
+      POSTGRES_PASSWORD: news_pass
+      POSTGRES_DB: NEWS_PLATFORM
+    ports:
+      - "5433:5432"
