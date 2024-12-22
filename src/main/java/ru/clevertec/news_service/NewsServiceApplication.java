@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
         "ru.clevertec"
 })
 @EntityScan(basePackages = "ru.clevertec.entity")
-@EnableJpaRepositories(basePackages = "ru.clevertec.entity")
+@EnableJpaRepositories(basePackages = "ru.clevertec.repository")
 public class NewsServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(NewsServiceApplication.class, args);
