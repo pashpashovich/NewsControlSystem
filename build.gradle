@@ -13,12 +13,6 @@ java {
     }
 }
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
-
 repositories {
     mavenCentral()
 }
@@ -32,6 +26,7 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'org.springframework.boot'
 
+
     group = 'ru.clevertec'
     version = '0.0.1-SNAPSHOT'
 
@@ -44,21 +39,13 @@ subprojects {
             languageVersion = JavaLanguageVersion.of(21)
         }
     }
-}
 
-
-dependencies {
-    annotationProcessor 'org.projectlombok:lombok:1.18.30'
-    annotationProcessor "org.mapstruct:mapstruct-processor:1.4.2.Final"
-    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
-    implementation project(':core')
-    implementation project(':api')
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
-    runtimeOnly 'org.postgresql:postgresql'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    dependencies {
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    }
 }
 
 dependencyManagement {
@@ -69,4 +56,8 @@ dependencyManagement {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+tasks.named('bootJar') {
+    mainClass.set("ru.clevertec.NewsServiceApplication")
 }

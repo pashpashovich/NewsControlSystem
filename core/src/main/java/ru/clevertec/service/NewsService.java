@@ -8,17 +8,17 @@ import ru.clevertec.dto.NewsDto;
 import ru.clevertec.entity.News;
 import ru.clevertec.exception.NotFoundException;
 import ru.clevertec.mapper.NewsMapper;
-import ru.clevertec.repository.NewsRepository;
+import ru.clevertec.port.NewsRepositoryPort;
 
 import java.util.UUID;
 
 @Service
 public class NewsService {
 
-    private final NewsRepository newsRepository;
+    private final NewsRepositoryPort newsRepository;
     private final NewsMapper newsMapper;
 
-    public NewsService(NewsRepository newsRepository, NewsMapper newsMapper) {
+    public NewsService(NewsRepositoryPort newsRepository, NewsMapper newsMapper) {
         this.newsRepository = newsRepository;
         this.newsMapper = newsMapper;
     }

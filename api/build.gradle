@@ -1,12 +1,13 @@
 tasks.named('bootJar') {
-    enabled = false
+    enabled = true
 }
 
 dependencies {
     implementation project(':core')
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation("org.postgresql:postgresql:42.7.4")
     implementation 'jakarta.validation:jakarta.validation-api:3.1.0'
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
 }
+
+
