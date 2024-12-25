@@ -1,5 +1,6 @@
 package ru.clevertec.exception_handler;
 
+import feign.FeignException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
@@ -19,6 +20,16 @@ public class GlobalExceptionHandler {
                 .build();
         return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<ApiResponse<ErrorResponse>> handleFeignException(FeignException ex) {
+        ApiResponse<ErrorResponse> apiResponse = ApiResponse.<ErrorResponse>builder()
+                .message(ex.getMessage())
+                .status(false)
+                .build();
+        return new ResponseEntity<>(apiResponse, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
 
     @ExceptionHandler(RuntimeException.class)
     public ApiResponse<ErrorResponse> handleRuntimeException(RuntimeException ex) {

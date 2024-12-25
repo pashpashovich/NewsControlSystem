@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/NEWS_PLATFORM
+    username: news_user
+    password: news_pass
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false

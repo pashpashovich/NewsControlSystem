@@ -43,9 +43,16 @@ public class NewsService {
         NewsWithCommentsDto news = newsMapper.toDtoWithComments(newsRepository.findById(newsId)
                 .orElseThrow(() -> new NotFoundException("Новость не найдена")));
         Page<CommentDto> comments = commentClient.getCommentsForNews(newsId);
-        System.out.println(comments.getContent());
         news.setComments(comments.getContent());
         return news;
+    }
+
+    public CommentDto getExactComment(UUID newsId, UUID commentsId) {
+        List<CommentDto> comments = commentClient.getCommentsForNews(newsId).getContent();
+        return comments.stream()
+                .filter(commentDto -> commentDto.getId().equals(commentsId))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Комментария с таким ID не существует"));
     }
 
     public NewsDto updateNews(UUID newsId, NewsCreateRequest newsUpdateRequest) {
