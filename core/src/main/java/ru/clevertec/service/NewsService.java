@@ -1,11 +1,12 @@
 package ru.clevertec.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import ru.clevertec.domain.News;
 import ru.clevertec.dto.NewsCreateRequest;
 import ru.clevertec.dto.NewsDto;
-import ru.clevertec.entity.News;
 import ru.clevertec.exception.NotFoundException;
 import ru.clevertec.mapper.NewsMapper;
 import ru.clevertec.port.NewsRepositoryPort;
@@ -13,15 +14,11 @@ import ru.clevertec.port.NewsRepositoryPort;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class NewsService {
 
     private final NewsRepositoryPort newsRepository;
     private final NewsMapper newsMapper;
-
-    public NewsService(NewsRepositoryPort newsRepository, NewsMapper newsMapper) {
-        this.newsRepository = newsRepository;
-        this.newsMapper = newsMapper;
-    }
 
     public Page<NewsDto> getAllNews(Pageable pageable) {
         return newsMapper.toDtoList(newsRepository.findAll(pageable));

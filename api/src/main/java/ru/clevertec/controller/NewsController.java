@@ -1,6 +1,7 @@
 package ru.clevertec.controller;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -22,27 +23,29 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/news")
+@RequiredArgsConstructor
 public class NewsController {
 
     private final NewsService newsService;
 
-    public NewsController(NewsService newsService) {
-        this.newsService = newsService;
-    }
-
     @GetMapping
-    public Page<NewsDto> getAllNews(Pageable pageable) {
-        return newsService.getAllNews(pageable);
+    public ResponseEntity<ApiResponse<Page<NewsDto>>> getAllNews(Pageable pageable) {
+        Page<NewsDto> allNews = newsService.getAllNews(pageable);
+        return ResponseEntity.ok(ApiResponse.<Page<NewsDto>>builder()
+                .data(allNews)
+                .message("Все новости получены")
+                .status(true)
+                .build());
     }
 
     @GetMapping("/{newsId}")
-    public ApiResponse<NewsDto> getNewsById(@PathVariable UUID newsId) {
+    public ResponseEntity<ApiResponse<NewsDto>> getNewsById(@PathVariable UUID newsId) {
         NewsDto newsDto = newsService.getNewsById(newsId);
-        return ApiResponse.<NewsDto>builder()
+        return ResponseEntity.ok(ApiResponse.<NewsDto>builder()
                 .data(newsDto)
                 .message("Новость успешна получена")
                 .status(true)
-                .build();
+                .build());
     }
 
     @PostMapping
