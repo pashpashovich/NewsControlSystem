@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.clevertec.api.ApiResponse;
 import ru.clevertec.dto.NewsCreateRequest;
 import ru.clevertec.dto.NewsDto;
+import ru.clevertec.dto.NewsWithCommentsDto;
 import ru.clevertec.service.NewsService;
 
 import java.util.UUID;
@@ -45,6 +46,16 @@ public class NewsController {
                 .data(newsDto)
                 .message("Новость успешна получена")
                 .status(true)
+                .build());
+    }
+
+    @GetMapping("/{newsId}/comments")
+    public ResponseEntity<ApiResponse<NewsWithCommentsDto>> getNewsWithComments(@PathVariable UUID newsId) {
+        NewsWithCommentsDto newsWithComments = newsService.getNewsWithComments(newsId);
+        return ResponseEntity.ok(ApiResponse.<NewsWithCommentsDto>builder()
+                .data(newsWithComments)
+                .status(true)
+                .message("Новость с комментариями получена")
                 .build());
     }
 
