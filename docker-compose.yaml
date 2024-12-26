@@ -7,3 +7,9 @@ services:
       POSTGRES_DB: NEWS_PLATFORM
     ports:
       - "5433:5432"
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    command: redis-server
