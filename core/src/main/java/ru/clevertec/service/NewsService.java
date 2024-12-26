@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import ru.clevertec.cache.Cache;
 import ru.clevertec.domain.News;
 import ru.clevertec.dto.CommentDto;
 import ru.clevertec.dto.NewsCreateRequest;
@@ -24,6 +25,8 @@ public class NewsService {
     private final NewsRepositoryPort newsRepository;
     private final NewsMapper newsMapper;
     private final CommentServicePort commentClient;
+    private final Cache<UUID, News> cache;
+
 
     public Page<NewsDto> getAllNews(Pageable pageable) {
         return newsMapper.toDtoList(newsRepository.findAll(pageable));
@@ -31,20 +34,27 @@ public class NewsService {
 
     public NewsDto createNews(NewsCreateRequest newsDto) {
         News savedNews = newsRepository.save(newsMapper.toEntity(newsDto));
+        cache.put(savedNews.getId(), savedNews);
         return newsMapper.toDto(savedNews);
     }
 
     public NewsDto getNewsById(UUID newsId) {
-        return newsMapper.toDto(newsRepository.findById(newsId)
-                .orElseThrow(() -> new NotFoundException(String.format("Новость с ID %s не найдена", newsId))));
+        News news = cache.contains(newsId) ? cache.get(newsId)
+                : newsRepository.findById(newsId)
+                .orElseThrow(() -> new NotFoundException(String.format("Новость с ID %s не найдена", newsId)));
+        cache.put(newsId, news);
+        return newsMapper.toDto(news);
     }
 
     public NewsWithCommentsDto getNewsWithComments(UUID newsId) {
-        NewsWithCommentsDto news = newsMapper.toDtoWithComments(newsRepository.findById(newsId)
-                .orElseThrow(() -> new NotFoundException("Новость не найдена")));
+        News news = cache.contains(newsId) ? cache.get(newsId)
+                : newsRepository.findById(newsId)
+                .orElseThrow(() -> new NotFoundException(String.format("Новость с ID %s не найдена", newsId)));
+        cache.put(newsId, news);
         Page<CommentDto> comments = commentClient.getCommentsForNews(newsId);
-        news.setComments(comments.getContent());
-        return news;
+        NewsWithCommentsDto newsWithComments = newsMapper.toDtoWithComments(news);
+        newsWithComments.setComments(comments.getContent());
+        return newsWithComments;
     }
 
     public CommentDto getExactComment(UUID newsId, UUID commentsId) {
@@ -58,10 +68,10 @@ public class NewsService {
     public NewsDto updateNews(UUID newsId, NewsCreateRequest newsUpdateRequest) {
         News news = newsRepository.findById(newsId)
                 .orElseThrow(() -> new NotFoundException(String.format("Новость с ID %s не найдена", newsId)));
-
         news.setTitle(newsUpdateRequest.getTitle());
         news.setText(newsUpdateRequest.getText());
         news = newsRepository.save(news);
+        cache.put(newsId, news);
         return newsMapper.toDto(news);
     }
 
@@ -71,5 +81,6 @@ public class NewsService {
             throw new NotFoundException(String.format("Новость с ID %s не найдена", newsId));
         }
         newsRepository.deleteById(newsId);
+        cache.remove(newsId);
     }
 }
