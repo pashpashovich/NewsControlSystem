@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="2" author="pashpashovich">
+        <insert tableName="news">
+            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="title" value="Breaking News"/>
+            <column name="text" value="Breaking news about the latest events."/>
+            <column name="created_at" valueDate="2024-12-25T10:00:00"/>
+        </insert>
+        <insert tableName="news">
+            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="title" value="Technology Update"/>
+            <column name="text" value="New advancements in AI and robotics."/>
+            <column name="created_at" valueDate="2024-12-25T11:00:00"/>
+        </insert>
+        <insert tableName="news">
+            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="title" value="Sports Highlights"/>
+            <column name="text" value="An overview of recent sports events."/>
+            <column name="created_at" valueDate="2024-12-25T12:00:00"/>
+        </insert>
+        <insert tableName="news">
+            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="title" value="Health Tips"/>
+            <column name="text" value="Simple tips for a healthier lifestyle."/>
+            <column name="created_at" valueDate="2024-12-25T13:00:00"/>
+        </insert>
+        <insert tableName="news">
+            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="title" value="Market Trends"/>
+            <column name="text" value="Updates on the stock market and economy."/>
+            <column name="created_at" valueDate="2024-12-25T14:00:00"/>
+        </insert>
+        <insert tableName="news">
+            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="title" value="Weather Update"/>
+            <column name="text" value="Today's weather forecast and analysis."/>
+            <column name="created_at" valueDate="2024-12-25T15:00:00"/>
+        </insert>
+        <insert tableName="news">
+            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="title" value="Travel Tips"/>
+            <column name="text" value="Best destinations to visit this season."/>
+            <column name="created_at" valueDate="2024-12-25T16:00:00"/>
+        </insert>
+        <insert tableName="news">
+            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="title" value="Entertainment Buzz"/>
+            <column name="text" value="Latest updates from the entertainment world."/>
+            <column name="created_at" valueDate="2024-12-25T17:00:00"/>
+        </insert>
+        <insert tableName="news">
+            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="title" value="Science Discoveries"/>
+            <column name="text" value="Exciting breakthroughs in science and research."/>
+            <column name="created_at" valueDate="2024-12-25T18:00:00"/>
+        </insert>
+        <insert tableName="news">
+            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="title" value="Community Events"/>
+            <column name="text" value="Upcoming events in your local community."/>
+            <column name="created_at" valueDate="2024-12-25T19:00:00"/>
+        </insert>
+        <insert tableName="news">
+            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="title" value="Breaking News2"/>
+            <column name="text" value="Breaking news about the best events."/>
+            <column name="created_at" valueDate="2024-12-26T10:00:00"/>
+        </insert>
+        <insert tableName="news">
+            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="title" value="Technology Update2"/>
+            <column name="text" value="New advancements in AI and ML."/>
+            <column name="created_at" valueDate="2024-12-26T11:00:00"/>
+        </insert>
+        <insert tableName="news">
+            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="title" value="Sports Highlights2"/>
+            <column name="text" value="An overview of best sports events."/>
+            <column name="created_at" valueDate="2024-12-26T12:00:00"/>
+        </insert>
+        <insert tableName="news">
+            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="title" value="Health Tips2"/>
+            <column name="text" value="Simple tips for a healthier lifestyle."/>
+            <column name="created_at" valueDate="2024-12-26T13:00:00"/>
+        </insert>
+        <insert tableName="news">
+            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="title" value="Market Trends2"/>
+            <column name="text" value="Updates on the stock market and economy."/>
+            <column name="created_at" valueDate="2024-12-26T14:00:00"/>
+        </insert>
+        <insert tableName="news">
+            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="title" value="Weather Update2"/>
+            <column name="text" value="Today's weather forecast."/>
+            <column name="created_at" valueDate="2024-12-26T15:00:00"/>
+        </insert>
+        <insert tableName="news">
+            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="title" value="Travel Tips2"/>
+            <column name="text" value="Best destinations to visit this season."/>
+            <column name="created_at" valueDate="2024-12-26T16:00:00"/>
+        </insert>
+        <insert tableName="news">
+            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="title" value="Entertainment Buzz2"/>
+            <column name="text" value="Latest updates from the entertainment world."/>
+            <column name="created_at" valueDate="2024-12-26T17:00:00"/>
+        </insert>
+        <insert tableName="news">
+            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="title" value="Science Discoveries2"/>
+            <column name="text" value="Exciting breakthroughs in science."/>
+            <column name="created_at" valueDate="2024-12-26T18:00:00"/>
+        </insert>
+        <insert tableName="news">
+            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="title" value="Community Events2"/>
+            <column name="text" value="Last events in your local community."/>
+            <column name="created_at" valueDate="2024-12-26T19:00:00"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

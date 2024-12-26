@@ -23,7 +23,7 @@ public class NewsEntity {
     private UUID id;
     @Column(name = "title")
     private String title;
-    @Column(name = "text")
+    @Column(name = "text",columnDefinition = "TEXT")
     private String text;
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
