@@ -2,7 +2,6 @@ package ru.clevertec.cache;
 
 import org.springframework.data.redis.core.RedisTemplate;
 
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class RedisCache<K, V> implements Cache<K, V> {

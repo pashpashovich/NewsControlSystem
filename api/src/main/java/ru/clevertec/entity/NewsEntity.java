@@ -6,7 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -16,6 +18,8 @@ import java.util.UUID;
 @Table(name = "news")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class NewsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

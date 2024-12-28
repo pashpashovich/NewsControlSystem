@@ -29,7 +29,7 @@ public class NewsService {
 
 
     public Page<NewsDto> getAllNews(Pageable pageable) {
-        return newsMapper.toDtoList(newsRepository.findAll(pageable));
+        return newsMapper.toDtoPage(newsRepository.findAll(pageable));
     }
 
     public NewsDto createNews(NewsCreateRequest newsDto) {
@@ -82,5 +82,9 @@ public class NewsService {
         }
         newsRepository.deleteById(newsId);
         cache.remove(newsId);
+    }
+
+    public List<NewsDto> searchNews(String query) {
+        return newsMapper.toDtoList(newsRepository.searchByText(query));
     }
 }

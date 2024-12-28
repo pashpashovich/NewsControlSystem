@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import ru.clevertec.domain.News;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,4 +14,5 @@ public interface NewsRepositoryPort {
     News save(News news);
     void deleteById(UUID id);
     boolean existsById(UUID id);
+    List<News> searchByText(String query);
 }

@@ -9,6 +9,7 @@ import ru.clevertec.mapper.NewsDomainMapper;
 import ru.clevertec.port.NewsRepositoryPort;
 import ru.clevertec.repository.NewsRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,7 +22,7 @@ public class NewsRepositoryAdapter implements NewsRepositoryPort {
 
     @Override
     public Page<News> findAll(Pageable pageable) {
-        return newsMapper.toDomainList(newsRepository.findAll(pageable));
+        return newsMapper.toDomainPage(newsRepository.findAll(pageable));
     }
 
     @Override
@@ -43,6 +44,11 @@ public class NewsRepositoryAdapter implements NewsRepositoryPort {
     @Override
     public boolean existsById(UUID id) {
         return newsRepository.existsById(id);
+    }
+
+    @Override
+    public List<News> searchByText(String query) {
+        return newsMapper.toDomainList(newsRepository.searchByText(query));
     }
 }
 

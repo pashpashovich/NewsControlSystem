@@ -8,12 +8,14 @@ import ru.clevertec.dto.NewsCreateRequest;
 import ru.clevertec.dto.NewsDto;
 import ru.clevertec.dto.NewsWithCommentsDto;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface NewsMapper {
-    default Page<NewsDto> toDtoList(Page<News> news) {
+    default Page<NewsDto> toDtoPage(Page<News> news) {
         return news.map(this::toDto);
     }
-
+    List<NewsDto> toDtoList(List<News> news);
     NewsDto toDto(News news);
 
     @Mapping(target = "id", ignore = true)

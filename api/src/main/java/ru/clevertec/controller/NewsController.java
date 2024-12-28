@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.clevertec.api.ApiResponse;
 import ru.clevertec.dto.CommentDto;
@@ -21,11 +23,13 @@ import ru.clevertec.dto.NewsDto;
 import ru.clevertec.dto.NewsWithCommentsDto;
 import ru.clevertec.service.NewsService;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/news")
 @RequiredArgsConstructor
+@Validated
 public class NewsController {
 
     private final NewsService newsService;
@@ -61,14 +65,26 @@ public class NewsController {
     }
 
     @GetMapping("/{newsId}/comments/{commentsId}")
-    public ResponseEntity<ApiResponse<CommentDto>> getExactComment(@PathVariable UUID newsId,@PathVariable UUID commentsId) {
-        CommentDto comment = newsService.getExactComment(newsId,commentsId);
+    public ResponseEntity<ApiResponse<CommentDto>> getExactComment(@PathVariable UUID newsId, @PathVariable UUID commentsId) {
+        CommentDto comment = newsService.getExactComment(newsId, commentsId);
         return ResponseEntity.ok(ApiResponse.<CommentDto>builder()
                 .data(comment)
                 .status(true)
                 .message("Комментарий к новости получен")
                 .build());
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<List<NewsDto>>> searchNews(
+            @RequestParam String query) {
+        List<NewsDto> searchResults = newsService.searchNews(query);
+        return ResponseEntity.ok(ApiResponse.<List<NewsDto>>builder()
+                .data(searchResults)
+                .status(true)
+                .message("Результаты поиска новостей")
+                .build());
+    }
+
 
     @PostMapping
     public ResponseEntity<NewsDto> createNews(@Valid @RequestBody NewsCreateRequest newsDto) {
