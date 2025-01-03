@@ -1,8 +1,10 @@
 package ru.clevertec.exception_handler;
 
 import feign.FeignException;
+import org.springframework.dao.PermissionDeniedDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -33,6 +35,15 @@ public class GlobalExceptionHandler {
                 .status(false)
                 .build();
         return new ResponseEntity<>(apiResponse, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiResponse<ErrorResponse>> handlePermissionException(AccessDeniedException ex) {
+        ApiResponse<ErrorResponse> apiResponse = ApiResponse.<ErrorResponse>builder()
+                .message(ex.getMessage())
+                .status(false)
+                .build();
+        return new ResponseEntity<>(apiResponse, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

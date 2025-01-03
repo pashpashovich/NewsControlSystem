@@ -15,11 +15,14 @@ public interface NewsMapper {
     default Page<NewsDto> toDtoPage(Page<News> news) {
         return news.map(this::toDto);
     }
+
     List<NewsDto> toDtoList(List<News> news);
+
     NewsDto toDto(News news);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "username", ignore = true)
     News toEntity(NewsCreateRequest newsDto);
 
     @Mapping(target = "comments", ignore = true)

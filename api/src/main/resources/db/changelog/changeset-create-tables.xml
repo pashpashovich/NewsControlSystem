@@ -19,6 +19,9 @@
             <column name="created_at" type="TIMESTAMP">
                 <constraints nullable="true"/>
             </column>
+            <column name="username" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 </databaseChangeLog>

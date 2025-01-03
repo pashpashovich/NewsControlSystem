@@ -31,5 +31,7 @@ public class NewsEntity {
     private String text;
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "username",nullable = false)
+    private String username;
 }
 

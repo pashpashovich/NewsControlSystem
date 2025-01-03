@@ -3,6 +3,9 @@ package ru.clevertec.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.clevertec.cache.Cache;
 import ru.clevertec.domain.News;
@@ -33,7 +36,9 @@ public class NewsService {
     }
 
     public NewsDto createNews(NewsCreateRequest newsDto) {
-        News savedNews = newsRepository.save(newsMapper.toEntity(newsDto));
+        News news = newsMapper.toEntity(newsDto);
+        news.setUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        News savedNews = newsRepository.save(news);
         cache.put(savedNews.getId(), savedNews);
         return newsMapper.toDto(savedNews);
     }
@@ -66,8 +71,14 @@ public class NewsService {
     }
 
     public NewsDto updateNews(UUID newsId, NewsCreateRequest newsUpdateRequest) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean isAdmin = SecurityContextHolder.getContext().getAuthentication().getAuthorities()
+                .stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ADMIN"));
         News news = newsRepository.findById(newsId)
                 .orElseThrow(() -> new NotFoundException(String.format("Новость с ID %s не найдена", newsId)));
+        if (!news.getUsername().equals(username) && !isAdmin)
+            throw new AccessDeniedException("Вы не имеете право на обновление этой новости");
         news.setTitle(newsUpdateRequest.getTitle());
         news.setText(newsUpdateRequest.getText());
         news = newsRepository.save(news);
@@ -77,9 +88,14 @@ public class NewsService {
 
 
     public void deleteNews(UUID newsId) {
-        if (!newsRepository.existsById(newsId)) {
-            throw new NotFoundException(String.format("Новость с ID %s не найдена", newsId));
-        }
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean isAdmin = SecurityContextHolder.getContext().getAuthentication().getAuthorities()
+                .stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ADMIN"));
+        News news = newsRepository.findById(newsId)
+                .orElseThrow(() -> new NotFoundException(String.format("Новость с ID %s не найдена", newsId)));
+        if (!news.getUsername().equals(username) && !isAdmin)
+            throw new AccessDeniedException("Вы не имеете право на обновление этой новости");
         newsRepository.deleteById(newsId);
         cache.remove(newsId);
     }

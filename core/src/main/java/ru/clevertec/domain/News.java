@@ -12,5 +12,6 @@ public class News {
     private UUID id;
     private String title;
     private String text;
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt=LocalDateTime.now();
+    private String username;
 }

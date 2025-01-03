@@ -42,11 +42,6 @@ public class NewsRepositoryAdapter implements NewsRepositoryPort {
     }
 
     @Override
-    public boolean existsById(UUID id) {
-        return newsRepository.existsById(id);
-    }
-
-    @Override
     public List<News> searchByText(String query) {
         return newsMapper.toDomainList(newsRepository.searchByText(query));
     }

@@ -13,6 +13,5 @@ public interface NewsRepositoryPort {
     Optional<News> findById(UUID id);
     News save(News news);
     void deleteById(UUID id);
-    boolean existsById(UUID id);
     List<News> searchByText(String query);
 }
