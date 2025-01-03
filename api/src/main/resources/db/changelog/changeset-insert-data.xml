@@ -6,140 +6,140 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
     <changeSet id="2" author="pashpashovich">
         <insert tableName="news">
-            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="id" value="b01d45ac-4343-4d3a-b366-cf79c9a9c84b"/>
             <column name="title" value="Breaking News"/>
             <column name="text" value="Breaking news about the latest events."/>
             <column name="created_at" valueDate="2024-12-25T10:00:00"/>
             <column name="username" value="pashpashovich"/>
         </insert>
         <insert tableName="news">
-            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="id" value="c48f218b-5134-4f0e-817b-991bf066a03e"/>
             <column name="title" value="Technology Update"/>
             <column name="text" value="New advancements in AI and robotics."/>
             <column name="created_at" valueDate="2024-12-25T11:00:00"/>
             <column name="username" value="pashpashovich"/>
         </insert>
         <insert tableName="news">
-            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="id" value="b19e9a8c-6934-463d-bcf8-1dbf187c32ff"/>
             <column name="title" value="Sports Highlights"/>
             <column name="text" value="An overview of recent sports events."/>
             <column name="created_at" valueDate="2024-12-25T12:00:00"/>
             <column name="username" value="pashpashovich"/>
         </insert>
         <insert tableName="news">
-            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="id" value="38e4e1f2-8f2a-43a0-adf6-8d830d005e1e"/>
             <column name="title" value="Health Tips"/>
             <column name="text" value="Simple tips for a healthier lifestyle."/>
             <column name="created_at" valueDate="2024-12-25T13:00:00"/>
             <column name="username" value="pashpashovich2"/>
         </insert>
         <insert tableName="news">
-            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="id" value="fd2d397e-53a0-4bc4-829c-1496c0e5c3f2"/>
             <column name="title" value="Market Trends"/>
             <column name="text" value="Updates on the stock market and economy."/>
             <column name="created_at" valueDate="2024-12-25T14:00:00"/>
             <column name="username" value="pashpashovich2"/>
         </insert>
         <insert tableName="news">
-            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="id" value="8e6ddb51-7484-4065-8165-f680d2c2e824"/>
             <column name="title" value="Weather Update"/>
             <column name="text" value="Today's weather forecast and analysis."/>
             <column name="created_at" valueDate="2024-12-25T15:00:00"/>
             <column name="username" value="pashpashovich2"/>
         </insert>
         <insert tableName="news">
-            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="id" value="65ff4874-90a7-404d-b0b1-ec10839a3c73"/>
             <column name="title" value="Travel Tips"/>
             <column name="text" value="Best destinations to visit this season."/>
             <column name="created_at" valueDate="2024-12-25T16:00:00"/>
             <column name="username" value="pashpashovich2"/>
         </insert>
         <insert tableName="news">
-            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="id" value="ad9d3800-e6e1-4231-9d5a-38f2c009d455"/>
             <column name="title" value="Entertainment Buzz"/>
             <column name="text" value="Latest updates from the entertainment world."/>
             <column name="created_at" valueDate="2024-12-25T17:00:00"/>
             <column name="username" value="pashpashovich2"/>
         </insert>
         <insert tableName="news">
-            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="id" value="a8ddd362-2d07-4f4a-9762-8a07f680084c"/>
             <column name="title" value="Science Discoveries"/>
             <column name="text" value="Exciting breakthroughs in science and research."/>
             <column name="created_at" valueDate="2024-12-25T18:00:00"/>
             <column name="username" value="pashpashovich2"/>
         </insert>
         <insert tableName="news">
-            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="id" value="37d46455-2816-40d7-810a-6614648326e3"/>
             <column name="title" value="Community Events"/>
             <column name="text" value="Upcoming events in your local community."/>
             <column name="created_at" valueDate="2024-12-25T19:00:00"/>
             <column name="username" value="pashpashovich2"/>
         </insert>
         <insert tableName="news">
-            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="id" value="61dce3b0-0375-4898-aa6c-0cc7ad19d775"/>
             <column name="title" value="Breaking News2"/>
             <column name="text" value="Breaking news about the best events."/>
             <column name="created_at" valueDate="2024-12-26T10:00:00"/>
             <column name="username" value="pashpashovich2"/>
         </insert>
         <insert tableName="news">
-            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="id" value="9ef73e31-a0b2-4679-999b-67b2af056f65"/>
             <column name="title" value="Technology Update2"/>
             <column name="text" value="New advancements in AI and ML."/>
             <column name="created_at" valueDate="2024-12-26T11:00:00"/>
             <column name="username" value="pashpashovich2"/>
         </insert>
         <insert tableName="news">
-            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="id" value="e7b02b8c-a587-4d83-bd39-fd8d49f0d6cf"/>
             <column name="title" value="Sports Highlights2"/>
             <column name="text" value="An overview of best sports events."/>
             <column name="created_at" valueDate="2024-12-26T12:00:00"/>
             <column name="username" value="pashpashovich2"/>
         </insert>
         <insert tableName="news">
-            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="id" value="969509d8-5339-44e2-9f75-0ace96f3738b"/>
             <column name="title" value="Health Tips2"/>
             <column name="text" value="Simple tips for a healthier lifestyle."/>
             <column name="created_at" valueDate="2024-12-26T13:00:00"/>
             <column name="username" value="pashpashovich3"/>
         </insert>
         <insert tableName="news">
-            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="id" value="54c74dde-1654-44cb-8288-0e743f339629"/>
             <column name="title" value="Market Trends2"/>
             <column name="text" value="Updates on the stock market and economy."/>
             <column name="created_at" valueDate="2024-12-26T14:00:00"/>
             <column name="username" value="pashpashovich3"/>
         </insert>
         <insert tableName="news">
-            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="id" value="999b6f55-6229-421d-aa2c-8ce81e2c91b8"/>
             <column name="title" value="Weather Update2"/>
             <column name="text" value="Today's weather forecast."/>
             <column name="created_at" valueDate="2024-12-26T15:00:00"/>
             <column name="username" value="pashpashovich3"/>
         </insert>
         <insert tableName="news">
-            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="id" value="6b34087a-95f6-40eb-b9a3-3b8205e5eb66"/>
             <column name="title" value="Travel Tips2"/>
             <column name="text" value="Best destinations to visit this season."/>
             <column name="created_at" valueDate="2024-12-26T16:00:00"/>
             <column name="username" value="pashpashovich3"/>
         </insert>
         <insert tableName="news">
-            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="id" value="1a25cc73-5ec8-4c84-9ce9-352476d04553"/>
             <column name="title" value="Entertainment Buzz2"/>
             <column name="text" value="Latest updates from the entertainment world."/>
             <column name="created_at" valueDate="2024-12-26T17:00:00"/>
             <column name="username" value="pashpashovich3"/>
         </insert>
         <insert tableName="news">
-            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="id" value="240461ad-ea1e-4943-8bb0-bb52f73fe7ff"/>
             <column name="title" value="Science Discoveries2"/>
             <column name="text" value="Exciting breakthroughs in science."/>
             <column name="created_at" valueDate="2024-12-26T18:00:00"/>
             <column name="username" value="pashpashovich3"/>
         </insert>
         <insert tableName="news">
-            <column name="id" valueComputed="uuid_generate_v4()"/>
+            <column name="id" value="c3583000-b233-4cf3-9775-5153729491e0"/>
             <column name="title" value="Community Events2"/>
             <column name="text" value="Last events in your local community."/>
             <column name="created_at" valueDate="2024-12-26T19:00:00"/>
