@@ -43,18 +43,26 @@ public class NewsService {
     }
 
     public NewsDto getNewsById(UUID newsId) {
-        News news = cache.contains(newsId) ? cache.get(newsId)
-                : newsRepository.findById(newsId)
-                .orElseThrow(() -> new NotFoundException(String.format("Новость с ID %s не найдена", newsId)));
-        cache.put(newsId, news);
+        News news;
+        if (cache.contains(newsId)) {
+            news = cache.get(newsId);
+        } else {
+            news = newsRepository.findById(newsId)
+                    .orElseThrow(() -> new NotFoundException(String.format("Новость с ID %s не найдена", newsId)));
+            cache.put(newsId, news);
+        }
         return newsMapper.toDto(news);
     }
 
     public NewsWithCommentsDto getNewsWithComments(UUID newsId) {
-        News news = cache.contains(newsId) ? cache.get(newsId)
-                : newsRepository.findById(newsId)
-                .orElseThrow(() -> new NotFoundException(String.format("Новость с ID %s не найдена", newsId)));
-        cache.put(newsId, news);
+        News news;
+        if (cache.contains(newsId)) {
+            news = cache.get(newsId);
+        } else {
+            news = newsRepository.findById(newsId)
+                    .orElseThrow(() -> new NotFoundException(String.format("Новость с ID %s не найдена", newsId)));
+            cache.put(newsId, news);
+        }
         Page<CommentDto> comments = commentClient.getCommentsForNews(newsId);
         NewsWithCommentsDto newsWithComments = newsMapper.toDtoWithComments(news);
         newsWithComments.setComments(comments.getContent());
