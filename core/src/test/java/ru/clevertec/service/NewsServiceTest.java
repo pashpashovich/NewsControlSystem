@@ -127,7 +127,7 @@ class NewsServiceTest {
         Pageable pageable = mock(Pageable.class);
         Page<News> newsPage = new PageImpl<>(List.of(new News()));
         when(newsRepository.findAll(pageable)).thenReturn(newsPage);
-        when(newsMapper.toDtoPage(newsPage)).thenReturn(new PageImpl<>(List.of(NewsDto.builder().build())));
+        when(newsMapper.toDtoPage(newsPage)).thenReturn(new PageImpl<>(List.of(new NewsDto())));
 
         // when
         Page<NewsDto> result = newsService.getAllNews(pageable);
@@ -332,10 +332,7 @@ class NewsServiceTest {
         when(newsRepository.findById(newsId)).thenReturn(Optional.of(existingNews));
         when(newsRepository.save(existingNews)).thenReturn(existingNews);
         when(newsMapper.toDto(existingNews)).thenReturn(
-                NewsDto.builder()
-                        .title(updateRequest.getTitle())
-                        .text(updateRequest.getText())
-                        .build()
+                UtilCreator.createSampleNewsDto(updateRequest.getTitle(), updateRequest.getText())
         );
 
         // when
@@ -359,10 +356,7 @@ class NewsServiceTest {
         when(newsRepository.findById(newsId)).thenReturn(Optional.of(existingNews));
         when(newsRepository.save(existingNews)).thenReturn(existingNews);
         when(newsMapper.toDto(existingNews)).thenReturn(
-                NewsDto.builder()
-                        .title(updateRequest.getTitle())
-                        .text(updateRequest.getText())
-                        .build()
+                UtilCreator.createSampleNewsDto(updateRequest.getTitle(), updateRequest.getText())
         );
 
         Authentication authentication = mock(Authentication.class);

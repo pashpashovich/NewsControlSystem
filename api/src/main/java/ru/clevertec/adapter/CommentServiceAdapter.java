@@ -18,6 +18,6 @@ public class CommentServiceAdapter implements CommentServicePort {
 
     @Override
     public Page<CommentDto> getCommentsForNews(UUID newsId) {
-        return commentClient.getCommentsForNews(newsId);
+        return commentClient.getCommentsForNews(newsId).getBody().getData();
     }
 }

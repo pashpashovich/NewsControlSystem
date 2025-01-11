@@ -2,6 +2,7 @@ package ru.clevertec.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,7 @@ public class NewsController {
     private final NewsService newsService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<NewsDto>>> getAllNews(Pageable pageable) {
+    public ResponseEntity<ApiResponse<Page<NewsDto>>> getAllNews(@ParameterObject Pageable pageable) {
         Page<NewsDto> allNews = newsService.getAllNews(pageable);
         return ResponseEntity.ok(ApiResponse.<Page<NewsDto>>builder()
                 .data(allNews)

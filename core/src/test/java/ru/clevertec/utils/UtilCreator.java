@@ -27,10 +27,10 @@ public class UtilCreator {
     }
 
     public static NewsDto createSampleNewsDto(String title, String text) {
-        return NewsDto.builder()
-                .title(title)
-                .text(text)
-                .build();
+        NewsDto newsDto = new NewsDto();
+        newsDto.setTitle(title);
+        newsDto.setText(text);
+        return newsDto;
     }
 
     public static NewsWithCommentsDto createSampleNewsWithCommentsDto(String title, String text, List<CommentDto> comments) {

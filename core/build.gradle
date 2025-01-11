@@ -19,3 +19,43 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+openApiGenerate {
+    generatorName = "java"
+    inputSpec = "${projectDir}/src/main/resources/openapi.yaml"
+    outputDir = "${projectDir}/src/main/generated/openapi"
+    apiPackage = "ru.clevertec.api"
+    modelPackage = "ru.clevertec.dto"
+    invokerPackage = "ru.clevertec.invoker"
+    additionalProperties = [
+            useLombok: 'true'
+    ]
+    configOptions = [
+            dateLibrary                   : "custom",
+            openApiNullable               : "false",
+            interfaceOnly                 : "true",
+            additionalModelTypeAnnotations: '@lombok.Data @lombok.AllArgsConstructor @lombok.Builder',
+            useJakartaEe                  : 'true'
+    ]
+    generateApiDocumentation = false
+    generateApiTests = false
+    generateModelTests = false
+    typeMappings = [
+            "Date": "java.time.LocalDateTime"
+    ]
+    importMappings = [
+            "LocalDateTime": "java.time.LocalDateTime"
+    ]
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs += "${projectDir}/src/main/generated/openapi"
+        }
+    }
+}
+
+tasks.named('compileJava') {
+    dependsOn tasks.openApiGenerate
+}

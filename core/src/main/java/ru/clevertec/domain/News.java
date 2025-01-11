@@ -1,6 +1,5 @@
 package ru.clevertec.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +12,6 @@ public class News {
     private UUID id;
     private String title;
     private String text;
-    private LocalDateTime createdAt=LocalDateTime.now();
+    private LocalDateTime createdAt = LocalDateTime.now();
     private String username;
 }
