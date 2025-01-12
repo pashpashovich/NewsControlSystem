@@ -7,6 +7,7 @@ services:
       - "8081:8081"
     depends_on:
       - db-news
+      - redis
     restart: always
   db-news:
     image: postgres:15

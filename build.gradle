@@ -10,9 +10,8 @@ group = 'ru.clevertec'
 version = '0.0.1-SNAPSHOT'
 
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 repositories {
@@ -21,7 +20,20 @@ repositories {
 }
 
 ext {
-    set('springCloudVersion', "2024.0.0")
+    springBootVersion = '3.4.1'
+    dependencyManagementVersion = '1.1.7'
+    springCloudVersion = '2024.0.0'
+    mapStructVersion = '1.4.2.Final'
+    lombokVersion = '1.18.36'
+    gsonVersion = '2.11.0'
+    gsonFireVersion = '1.9.0'
+    okhttpVersion = '4.12.0'
+    jacksonNullableVersion = '0.2.6'
+    javaxAnnotationVersion = '1.3.2'
+    springdocVersion = '2.8.1'
+    jsonwebtokenVersion = '0.12.6'
+    redisVersion = '3.4.1'
+    jakartaVersion = '3.1.0'
 }
 
 subprojects {
@@ -30,7 +42,6 @@ subprojects {
     apply plugin: 'org.springframework.boot'
     apply plugin: 'jacoco'
     apply plugin: 'org.openapi.generator'
-
 
     group = 'ru.clevertec'
     version = '0.0.1-SNAPSHOT'
@@ -47,18 +58,32 @@ subprojects {
     }
 
     dependencies {
-        compileOnly 'org.projectlombok:lombok'
-        annotationProcessor 'org.projectlombok:lombok'
+        runtimeOnly "io.jsonwebtoken:jjwt-impl:${jsonwebtokenVersion}"
+        runtimeOnly "io.jsonwebtoken:jjwt-jackson:${jsonwebtokenVersion}"
+
+        compileOnly "org.projectlombok:lombok:${lombokVersion}"
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+        annotationProcessor "org.mapstruct:mapstruct-processor:${mapStructVersion}"
+
+        implementation "jakarta.validation:jakarta.validation-api:${jakartaVersion}"
+        implementation "org.springframework.boot:spring-boot-starter-data-redis:${redisVersion}"
+        implementation "org.mapstruct:mapstruct:${mapStructVersion}"
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'ru.clevertec:logger-starter:1.0'
         implementation 'ru.clevertec:exception-starter:1.0'
-        implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
-        implementation 'javax.annotation:javax.annotation-api:1.3.2'
-        implementation 'com.google.code.gson:gson:2.11.0'
-        implementation 'com.squareup.okhttp3:logging-interceptor:4.12.0'
-        implementation 'io.gsonfire:gson-fire:1.9.0'
-        implementation 'org.springdoc:springdoc-openapi-starter-common:2.8.1'
-        implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.1'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation "org.openapitools:jackson-databind-nullable:${jacksonNullableVersion}"
+        implementation "javax.annotation:javax.annotation-api:${javaxAnnotationVersion}"
+        implementation "com.google.code.gson:gson:${gsonVersion}"
+        implementation "com.squareup.okhttp3:logging-interceptor:${okhttpVersion}"
+        implementation "io.gsonfire:gson-fire:${gsonFireVersion}"
+        implementation "org.springdoc:springdoc-openapi-starter-common:${springdocVersion}"
+        implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}"
+        implementation "io.jsonwebtoken:jjwt-api:${jsonwebtokenVersion}"
+
+        testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+        testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
     }
 }
@@ -72,7 +97,6 @@ dependencyManagement {
 tasks.named('test') {
     useJUnitPlatform()
 }
-
 
 tasks.named('bootJar') {
     mainClass.set("ru.clevertec.NewsServiceApplication")

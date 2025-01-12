@@ -4,28 +4,27 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.data.domain.Page;
 import ru.clevertec.domain.News;
-import ru.clevertec.dto.NewsCreateRequest;
-import ru.clevertec.dto.NewsDto;
-import ru.clevertec.dto.NewsWithCommentsDto;
+import ru.clevertec.domain.NewsCreateRequestDomain;
+import ru.clevertec.domain.NewsFromDto;
+import ru.clevertec.domain.NewsWithCommentsFromDto;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface NewsMapper {
-    default Page<NewsDto> toDtoPage(Page<News> news) {
+    default Page<NewsFromDto> toDtoPage(Page<News> news) {
         return news.map(this::toDto);
     }
 
-    List<NewsDto> toDtoList(List<News> news);
+    List<NewsFromDto> toDtoList(List<News> news);
 
-    NewsDto toDto(News news);
+    NewsFromDto toDto(News news);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "username", ignore = true)
-    News toEntity(NewsCreateRequest newsDto);
+    News toEntity(NewsCreateRequestDomain newsDto);
 
     @Mapping(target = "comments", ignore = true)
-    NewsWithCommentsDto toDtoWithComments(News news);
-
+    NewsWithCommentsFromDto toDtoWithComments(News news);
 }

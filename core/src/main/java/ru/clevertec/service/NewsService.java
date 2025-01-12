@@ -7,11 +7,11 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.clevertec.cache.Cache;
+import ru.clevertec.domain.CommentFromDto;
 import ru.clevertec.domain.News;
-import ru.clevertec.dto.CommentDto;
-import ru.clevertec.dto.NewsCreateRequest;
-import ru.clevertec.dto.NewsDto;
-import ru.clevertec.dto.NewsWithCommentsDto;
+import ru.clevertec.domain.NewsCreateRequestDomain;
+import ru.clevertec.domain.NewsFromDto;
+import ru.clevertec.domain.NewsWithCommentsFromDto;
 import ru.clevertec.exception.NotFoundException;
 import ru.clevertec.mapper.NewsMapper;
 import ru.clevertec.port.CommentServicePort;
@@ -29,12 +29,11 @@ public class NewsService {
     private final CommentServicePort commentClient;
     private final Cache<UUID, News> cache;
 
-
-    public Page<NewsDto> getAllNews(Pageable pageable) {
+    public Page<NewsFromDto> getAllNews(Pageable pageable) {
         return newsMapper.toDtoPage(newsRepository.findAll(pageable));
     }
 
-    public NewsDto createNews(NewsCreateRequest newsDto) {
+    public NewsFromDto createNews(NewsCreateRequestDomain newsDto) {
         News news = newsMapper.toEntity(newsDto);
         news.setUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         News savedNews = newsRepository.save(news);
@@ -42,7 +41,7 @@ public class NewsService {
         return newsMapper.toDto(savedNews);
     }
 
-    public NewsDto getNewsById(UUID newsId) {
+    public NewsFromDto getNewsById(UUID newsId) {
         News news;
         if (cache.contains(newsId)) {
             news = cache.get(newsId);
@@ -54,7 +53,7 @@ public class NewsService {
         return newsMapper.toDto(news);
     }
 
-    public NewsWithCommentsDto getNewsWithComments(UUID newsId) {
+    public NewsWithCommentsFromDto getNewsWithComments(UUID newsId) {
         News news;
         if (cache.contains(newsId)) {
             news = cache.get(newsId);
@@ -63,21 +62,21 @@ public class NewsService {
                     .orElseThrow(() -> new NotFoundException(String.format("Новость с ID %s не найдена", newsId)));
             cache.put(newsId, news);
         }
-        Page<CommentDto> comments = commentClient.getCommentsForNews(newsId);
-        NewsWithCommentsDto newsWithComments = newsMapper.toDtoWithComments(news);
+        Page<CommentFromDto> comments = commentClient.getCommentsForNews(newsId);
+        NewsWithCommentsFromDto newsWithComments = newsMapper.toDtoWithComments(news);
         newsWithComments.setComments(comments.getContent());
         return newsWithComments;
     }
 
-    public CommentDto getExactComment(UUID newsId, UUID commentsId) {
-        List<CommentDto> comments = commentClient.getCommentsForNews(newsId).getContent();
+    public CommentFromDto getExactComment(UUID newsId, UUID commentsId) {
+        List<CommentFromDto> comments = commentClient.getCommentsForNews(newsId).getContent();
         return comments.stream()
                 .filter(commentDto -> commentDto.getId().equals(commentsId))
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException("Комментария с таким ID не существует"));
     }
 
-    public NewsDto updateNews(UUID newsId, NewsCreateRequest newsUpdateRequest) {
+    public NewsFromDto updateNews(UUID newsId, NewsCreateRequestDomain newsUpdateRequest) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         boolean isAdmin = SecurityContextHolder.getContext().getAuthentication().getAuthorities()
                 .stream()
@@ -107,7 +106,7 @@ public class NewsService {
         cache.remove(newsId);
     }
 
-    public List<NewsDto> searchNews(String query) {
+    public List<NewsFromDto> searchNews(String query) {
         return newsMapper.toDtoList(newsRepository.searchByText(query));
     }
 }

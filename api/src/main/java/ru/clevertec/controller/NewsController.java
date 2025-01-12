@@ -22,6 +22,7 @@ import ru.clevertec.dto.CommentDto;
 import ru.clevertec.dto.NewsCreateRequest;
 import ru.clevertec.dto.NewsDto;
 import ru.clevertec.dto.NewsWithCommentsDto;
+import ru.clevertec.mapper.NewsDomainMapper;
 import ru.clevertec.service.NewsService;
 
 import java.util.List;
@@ -34,10 +35,11 @@ import java.util.UUID;
 public class NewsController {
 
     private final NewsService newsService;
+    private final NewsDomainMapper newsDomainMapper;
 
     @GetMapping
     public ResponseEntity<ApiResponse<Page<NewsDto>>> getAllNews(@ParameterObject Pageable pageable) {
-        Page<NewsDto> allNews = newsService.getAllNews(pageable);
+        Page<NewsDto> allNews = newsDomainMapper.toDtoPage(newsService.getAllNews(pageable));
         return ResponseEntity.ok(ApiResponse.<Page<NewsDto>>builder()
                 .data(allNews)
                 .message("Все новости получены")
@@ -47,7 +49,7 @@ public class NewsController {
 
     @GetMapping("/{newsId}")
     public ResponseEntity<ApiResponse<NewsDto>> getNewsById(@PathVariable UUID newsId) {
-        NewsDto newsDto = newsService.getNewsById(newsId);
+        NewsDto newsDto = newsDomainMapper.toDto(newsService.getNewsById(newsId));
         return ResponseEntity.ok(ApiResponse.<NewsDto>builder()
                 .data(newsDto)
                 .message("Новость успешна получена")
@@ -57,7 +59,7 @@ public class NewsController {
 
     @GetMapping("/{newsId}/comments")
     public ResponseEntity<ApiResponse<NewsWithCommentsDto>> getNewsWithComments(@PathVariable UUID newsId) {
-        NewsWithCommentsDto newsWithComments = newsService.getNewsWithComments(newsId);
+        NewsWithCommentsDto newsWithComments = newsDomainMapper.toNewsWithCommentsDto(newsService.getNewsWithComments(newsId));
         return ResponseEntity.ok(ApiResponse.<NewsWithCommentsDto>builder()
                 .data(newsWithComments)
                 .status(true)
@@ -67,7 +69,7 @@ public class NewsController {
 
     @GetMapping("/{newsId}/comments/{commentsId}")
     public ResponseEntity<ApiResponse<CommentDto>> getExactComment(@PathVariable UUID newsId, @PathVariable UUID commentsId) {
-        CommentDto comment = newsService.getExactComment(newsId, commentsId);
+        CommentDto comment = newsDomainMapper.toCommentDto(newsService.getExactComment(newsId, commentsId));
         return ResponseEntity.ok(ApiResponse.<CommentDto>builder()
                 .data(comment)
                 .status(true)
@@ -78,7 +80,7 @@ public class NewsController {
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<List<NewsDto>>> searchNews(
             @RequestParam String query) {
-        List<NewsDto> searchResults = newsService.searchNews(query);
+        List<NewsDto> searchResults = newsDomainMapper.toDtoList(newsService.searchNews(query));
         return ResponseEntity.ok(ApiResponse.<List<NewsDto>>builder()
                 .data(searchResults)
                 .status(true)
@@ -89,7 +91,7 @@ public class NewsController {
 
     @PostMapping
     public ResponseEntity<NewsDto> createNews(@Valid @RequestBody NewsCreateRequest newsDto) {
-        NewsDto createdNews = newsService.createNews(newsDto);
+        NewsDto createdNews = newsDomainMapper.toDto(newsService.createNews(newsDomainMapper.toNewsCreateRequestDomain(newsDto)));
         return ResponseEntity.status(HttpStatus.CREATED).body(createdNews);
     }
 
@@ -97,7 +99,7 @@ public class NewsController {
     public ResponseEntity<NewsDto> updateNews(
             @PathVariable UUID newsId,
             @Valid @RequestBody NewsCreateRequest newsUpdateRequest) {
-        NewsDto updatedNews = newsService.updateNews(newsId, newsUpdateRequest);
+        NewsDto updatedNews = newsDomainMapper.toDto(newsService.updateNews(newsId, newsDomainMapper.toNewsCreateRequestDomain(newsUpdateRequest)));
         return ResponseEntity.ok(updatedNews);
     }
 

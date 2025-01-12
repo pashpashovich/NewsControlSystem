@@ -18,11 +18,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import ru.clevertec.cache.Cache;
+import ru.clevertec.domain.CommentFromDto;
 import ru.clevertec.domain.News;
-import ru.clevertec.dto.CommentDto;
-import ru.clevertec.dto.NewsCreateRequest;
-import ru.clevertec.dto.NewsDto;
-import ru.clevertec.dto.NewsWithCommentsDto;
+import ru.clevertec.domain.NewsCreateRequestDomain;
+import ru.clevertec.domain.NewsFromDto;
+import ru.clevertec.domain.NewsWithCommentsFromDto;
 import ru.clevertec.exception.NotFoundException;
 import ru.clevertec.mapper.NewsMapper;
 import ru.clevertec.port.CommentServicePort;
@@ -77,13 +77,13 @@ class NewsServiceTest {
 
     @ParameterizedTest
     @MethodSource("provideSearchNewsTestCases")
-    void shouldReturnExpectedResultsForSearchQuery(String query, List<News> repositoryResult, List<NewsDto> expectedDtos) {
+    void shouldReturnExpectedResultsForSearchQuery(String query, List<News> repositoryResult, List<NewsFromDto> expectedDtos) {
         // given
         when(newsRepository.searchByText(query)).thenReturn(repositoryResult);
         when(newsMapper.toDtoList(repositoryResult)).thenReturn(expectedDtos);
 
         // when
-        List<NewsDto> result = newsService.searchNews(query);
+        List<NewsFromDto> result = newsService.searchNews(query);
 
         // then
         assertThat(result).isEqualTo(expectedDtos);
@@ -127,10 +127,10 @@ class NewsServiceTest {
         Pageable pageable = mock(Pageable.class);
         Page<News> newsPage = new PageImpl<>(List.of(new News()));
         when(newsRepository.findAll(pageable)).thenReturn(newsPage);
-        when(newsMapper.toDtoPage(newsPage)).thenReturn(new PageImpl<>(List.of(new NewsDto())));
+        when(newsMapper.toDtoPage(newsPage)).thenReturn(new PageImpl<>(List.of(NewsFromDto.builder().build())));
 
         // when
-        Page<NewsDto> result = newsService.getAllNews(pageable);
+        Page<NewsFromDto> result = newsService.getAllNews(pageable);
 
         // then
         assertThat(result).isNotEmpty();
@@ -140,7 +140,7 @@ class NewsServiceTest {
     @Test
     void shouldCreateNews() {
         // given
-        NewsCreateRequest request = UtilCreator.createNewsCreateRequest("Title", "Content");
+        NewsCreateRequestDomain request = UtilCreator.createNewsCreateRequest("Title", "Content");
 
         News news = UtilCreator.createSampleNews(UUID.randomUUID(), "Title", "Content", "author");
 
@@ -149,7 +149,7 @@ class NewsServiceTest {
         when(newsMapper.toDto(news)).thenReturn(UtilCreator.createSampleNewsDto(news.getTitle(), news.getText()));
 
         // when
-        NewsDto result = newsService.createNews(request);
+        NewsFromDto result = newsService.createNews(request);
 
         // then
         assertThat(result.getTitle()).isEqualTo("Title");
@@ -164,14 +164,14 @@ class NewsServiceTest {
         UUID newsId = UUID.randomUUID();
         News news = UtilCreator.createSampleNews(newsId, "Test Title", "Test Content", "author");
 
-        NewsDto expectedDto = UtilCreator.createSampleNewsDto("Test Title", "Test Content");
+        NewsFromDto expectedDto = UtilCreator.createSampleNewsDto("Test Title", "Test Content");
 
         when(cache.contains(newsId)).thenReturn(false);
         when(newsRepository.findById(newsId)).thenReturn(Optional.of(news));
         when(newsMapper.toDto(news)).thenReturn(expectedDto);
 
         // when
-        NewsDto actualDto = newsService.getNewsById(newsId);
+        NewsFromDto actualDto = newsService.getNewsById(newsId);
 
         // then
         assertThat(actualDto).isEqualTo(expectedDto);
@@ -187,14 +187,14 @@ class NewsServiceTest {
         UUID newsId = UUID.randomUUID();
         News news = UtilCreator.createSampleNews(newsId, "Cached Title", "Cached Content", "author");
 
-        NewsDto expectedDto = UtilCreator.createSampleNewsDto("Cached Title", "Cached Content");
+        NewsFromDto expectedDto = UtilCreator.createSampleNewsDto("Cached Title", "Cached Content");
 
         when(cache.contains(newsId)).thenReturn(true);
         when(cache.get(newsId)).thenReturn(news);
         when(newsMapper.toDto(news)).thenReturn(expectedDto);
 
         // when
-        NewsDto actualDto = newsService.getNewsById(newsId);
+        NewsFromDto actualDto = newsService.getNewsById(newsId);
 
         // then
         assertThat(actualDto).isEqualTo(expectedDto);
@@ -222,7 +222,7 @@ class NewsServiceTest {
         UUID newsId = UUID.randomUUID();
         News news = UtilCreator.createSampleNews(newsId, "Cached Title", "Cached Content", "author");
 
-        NewsWithCommentsDto expectedDto = UtilCreator.createSampleNewsWithCommentsDto("Cached Title", "Content from cache", List.of());
+        NewsWithCommentsFromDto expectedDto = UtilCreator.createSampleNewsWithCommentsDto("Cached Title", "Content from cache", List.of());
 
         when(cache.contains(newsId)).thenReturn(true);
         when(cache.get(newsId)).thenReturn(news);
@@ -230,7 +230,7 @@ class NewsServiceTest {
         when(commentServicePort.getCommentsForNews(newsId)).thenReturn(Page.empty());
 
         // when
-        NewsWithCommentsDto result = newsService.getNewsWithComments(newsId);
+        NewsWithCommentsFromDto result = newsService.getNewsWithComments(newsId);
 
         // then
         assertThat(result).isEqualTo(expectedDto);
@@ -245,7 +245,7 @@ class NewsServiceTest {
         UUID newsId = UUID.randomUUID();
         News news = UtilCreator.createSampleNews(newsId, "Repo Title", "Content from repo", "author");
 
-        NewsWithCommentsDto expectedDto = UtilCreator.createSampleNewsWithCommentsDto("Repo Title", "Content from repo", List.of());
+        NewsWithCommentsFromDto expectedDto = UtilCreator.createSampleNewsWithCommentsDto("Repo Title", "Content from repo", List.of());
 
         when(cache.contains(newsId)).thenReturn(false);
         when(newsRepository.findById(newsId)).thenReturn(Optional.of(news));
@@ -253,7 +253,7 @@ class NewsServiceTest {
         when(commentServicePort.getCommentsForNews(newsId)).thenReturn(Page.empty());
 
         // when
-        NewsWithCommentsDto result = newsService.getNewsWithComments(newsId);
+        NewsWithCommentsFromDto result = newsService.getNewsWithComments(newsId);
 
         // then
         assertThat(result).isEqualTo(expectedDto);
@@ -284,15 +284,15 @@ class NewsServiceTest {
         // given
         UUID newsId = UUID.randomUUID();
         UUID commentId = UUID.randomUUID();
-        CommentDto comment1 = UtilCreator.createSampleComment(UUID.randomUUID(), "First comment");
-        CommentDto comment2 = UtilCreator.createSampleComment(commentId, "Exact comment");
+        CommentFromDto comment1 = UtilCreator.createSampleComment(UUID.randomUUID(), "First comment");
+        CommentFromDto comment2 = UtilCreator.createSampleComment(commentId, "Exact comment");
 
-        Page<CommentDto> commentsPage = new PageImpl<>(List.of(comment1, comment2));
+        Page<CommentFromDto> commentsPage = new PageImpl<>(List.of(comment1, comment2));
 
         when(commentServicePort.getCommentsForNews(newsId)).thenReturn(commentsPage);
 
         // when
-        CommentDto result = newsService.getExactComment(newsId, commentId);
+        CommentFromDto result = newsService.getExactComment(newsId, commentId);
 
         // then
         assertThat(result.getId()).isEqualTo(commentId);
@@ -306,10 +306,10 @@ class NewsServiceTest {
         UUID newsId = UUID.randomUUID();
         UUID commentId = UUID.randomUUID();
 
-        CommentDto comment1 = UtilCreator.createSampleComment(UUID.randomUUID(), "First comment");
-        CommentDto comment2 = UtilCreator.createSampleComment(UUID.randomUUID(), "Second comment");
+        CommentFromDto comment1 = UtilCreator.createSampleComment(UUID.randomUUID(), "First comment");
+        CommentFromDto comment2 = UtilCreator.createSampleComment(UUID.randomUUID(), "Second comment");
 
-        Page<CommentDto> commentsPage = new PageImpl<>(List.of(comment1, comment2));
+        Page<CommentFromDto> commentsPage = new PageImpl<>(List.of(comment1, comment2));
 
         when(commentServicePort.getCommentsForNews(newsId)).thenReturn(commentsPage);
 
@@ -325,7 +325,7 @@ class NewsServiceTest {
     void shouldUpdateNewsWhenUserIsAuthor() {
         // given
         UUID newsId = UUID.randomUUID();
-        NewsCreateRequest updateRequest = UtilCreator.createNewsCreateRequest("Updated Title", "Updated Text");
+        NewsCreateRequestDomain updateRequest = UtilCreator.createNewsCreateRequest("Updated Title", "Updated Text");
 
         News existingNews = UtilCreator.createSampleNews(newsId, "Old Title", "Old Text", "author");
 
@@ -336,7 +336,7 @@ class NewsServiceTest {
         );
 
         // when
-        NewsDto result = newsService.updateNews(newsId, updateRequest);
+        NewsFromDto result = newsService.updateNews(newsId, updateRequest);
 
         // then
         assertThat(result.getTitle()).isEqualTo("Updated Title");
@@ -349,7 +349,7 @@ class NewsServiceTest {
     void shouldUpdateNewsWhenUserIsAdmin() {
         // given
         UUID newsId = UUID.randomUUID();
-        NewsCreateRequest updateRequest = UtilCreator.createNewsCreateRequest("Updated Title", "Updated Text");
+        NewsCreateRequestDomain updateRequest = UtilCreator.createNewsCreateRequest("Updated Title", "Updated Text");
 
         News existingNews = UtilCreator.createSampleNews(newsId, "Old Title", "Old Text", "anotherUser");
 
@@ -367,7 +367,7 @@ class NewsServiceTest {
         SecurityContextHolder.setContext(securityContext);
 
         // when
-        NewsDto result = newsService.updateNews(newsId, updateRequest);
+        NewsFromDto result = newsService.updateNews(newsId, updateRequest);
 
         // then
         assertThat(result.getTitle()).isEqualTo("Updated Title");
@@ -380,7 +380,7 @@ class NewsServiceTest {
     void shouldThrowNotFoundExceptionWhenNewsDoesNotExist() {
         // given
         UUID newsId = UUID.randomUUID();
-        NewsCreateRequest updateRequest = new NewsCreateRequest();
+        NewsCreateRequestDomain updateRequest = new NewsCreateRequestDomain();
 
         when(newsRepository.findById(newsId)).thenReturn(Optional.empty());
 
@@ -397,7 +397,7 @@ class NewsServiceTest {
     void shouldThrowAccessDeniedExceptionWhenUserIsNotAuthorized() {
         // given
         UUID newsId = UUID.randomUUID();
-        NewsCreateRequest updateRequest = UtilCreator.createNewsCreateRequest("Updated Title", "Updated Text");
+        NewsCreateRequestDomain updateRequest = UtilCreator.createNewsCreateRequest("Updated Title", "Updated Text");
 
         News existingNews = UtilCreator.createSampleNews(newsId, "Old Title", "Old Text", "anotherUser");
 

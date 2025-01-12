@@ -1,6 +1,17 @@
 spring:
   profiles:
     active: dev,redis
+  data:
+    redis:
+      host: host.docker.internal
+      port: 6379
+
+feign:
+  user-service:
+    url: http://host.docker.internal:8085
+  comment-service:
+    url: http://host.docker.internal:8082
+
 
 server:
   port: 8081

@@ -29,6 +29,9 @@ components:
         text:
           type: string
           minLength: 10
+      required:
+          - title
+          - text
 
     CommentDto:
       type: object

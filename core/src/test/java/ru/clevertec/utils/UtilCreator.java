@@ -1,10 +1,10 @@
 package ru.clevertec.utils;
 
+import ru.clevertec.domain.CommentFromDto;
 import ru.clevertec.domain.News;
-import ru.clevertec.dto.CommentDto;
-import ru.clevertec.dto.NewsCreateRequest;
-import ru.clevertec.dto.NewsDto;
-import ru.clevertec.dto.NewsWithCommentsDto;
+import ru.clevertec.domain.NewsCreateRequestDomain;
+import ru.clevertec.domain.NewsFromDto;
+import ru.clevertec.domain.NewsWithCommentsFromDto;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,30 +19,30 @@ public class UtilCreator {
         return news;
     }
 
-    public static CommentDto createSampleComment(UUID id, String text) {
-        CommentDto commentDto = new CommentDto();
-        commentDto.setId(id);
-        commentDto.setText(text);
-        return commentDto;
+    public static CommentFromDto createSampleComment(UUID id, String text) {
+        return CommentFromDto.builder()
+                .id(id)
+                .text(text)
+                .build();
     }
 
-    public static NewsDto createSampleNewsDto(String title, String text) {
-        NewsDto newsDto = new NewsDto();
-        newsDto.setTitle(title);
-        newsDto.setText(text);
-        return newsDto;
+    public static NewsFromDto createSampleNewsDto(String title, String text) {
+        return NewsFromDto.builder()
+                .title(title)
+                .text(text)
+                .build();
     }
 
-    public static NewsWithCommentsDto createSampleNewsWithCommentsDto(String title, String text, List<CommentDto> comments) {
-        return NewsWithCommentsDto.builder()
+    public static NewsWithCommentsFromDto createSampleNewsWithCommentsDto(String title, String text, List<CommentFromDto> comments) {
+        return NewsWithCommentsFromDto.builder()
                 .title(title)
                 .text(text)
                 .comments(comments)
                 .build();
     }
 
-    public static NewsCreateRequest createNewsCreateRequest(String title, String text) {
-        NewsCreateRequest newsCreateRequest = new NewsCreateRequest();
+    public static NewsCreateRequestDomain createNewsCreateRequest(String title, String text) {
+        NewsCreateRequestDomain newsCreateRequest = new NewsCreateRequestDomain();
         newsCreateRequest.setTitle(title);
         newsCreateRequest.setText(text);
 

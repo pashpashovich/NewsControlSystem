@@ -10,7 +10,7 @@ import ru.clevertec.dto.CommentDto;
 
 import java.util.UUID;
 
-@FeignClient(name = "comment-service", url = "http://localhost:8082")
+@FeignClient(name = "comment-service", url = "${feign.comment-service.url}")
 public interface CommentClient {
 
     @GetMapping("/comments/{newsId}")

@@ -1,11 +1,10 @@
 package ru.clevertec.port;
 
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
-import ru.clevertec.dto.CommentDto;
+import ru.clevertec.domain.CommentFromDto;
 
 import java.util.UUID;
 
 public interface CommentServicePort {
-    Page<CommentDto> getCommentsForNews(UUID newsId);
+    Page<CommentFromDto> getCommentsForNews(UUID newsId);
 }

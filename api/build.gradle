@@ -3,25 +3,16 @@ tasks.named('bootJar') {
 }
 
 dependencies {
-
-    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
-    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
-    annotationProcessor 'org.projectlombok:lombok'
-
     implementation project(':core')
-    implementation("org.springframework.boot:spring-boot-starter-security:3.4.1")
-    implementation("org.liquibase:liquibase-core:4.30.0")
-    implementation("org.springframework.boot:spring-boot-starter-data-redis:3.4.1")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.2")
-    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+    implementation 'org.springframework.boot:spring-boot-starter-security:3.4.1'
+    implementation 'org.liquibase:liquibase-core:4.30.0'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.2'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation("org.springframework.cloud:spring-cloud-starter-openfeign:4.2.0")
-    implementation("org.postgresql:postgresql:42.7.4")
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.2.0'
+    implementation 'org.postgresql:postgresql:42.7.4'
     implementation 'jakarta.validation:jakarta.validation-api:3.1.0'
-    implementation("io.jsonwebtoken:jjwt-api:0.12.6")
+    implementation 'org.projectlombok:lombok'
     testImplementation 'org.projectlombok:lombok'
     testImplementation 'org.testcontainers:junit-jupiter:1.20.4'
     testImplementation 'org.testcontainers:postgresql:1.20.4'
@@ -31,10 +22,52 @@ dependencies {
     testImplementation 'org.springframework.cloud:spring-cloud-contract-wiremock:4.2.0'
 
 }
+
 test {
     useJUnitPlatform()
 }
 
 tasks.named('bootJar') {
     mainClass.set("ru.clevertec.NewsServiceApplication")
+}
+
+openApiGenerate {
+    generatorName = "java"
+    inputSpec = "${projectDir}/src/main/resources/openapi.yaml"
+    outputDir = "${projectDir}/src/main/generated/openapi"
+    apiPackage = "ru.clevertec.api"
+    modelPackage = "ru.clevertec.dto"
+    invokerPackage = "ru.clevertec.invoker"
+    additionalProperties = [
+            useLombok: 'true'
+    ]
+    configOptions = [
+            dateLibrary                   : "custom",
+            openApiNullable               : "false",
+            interfaceOnly                 : "true",
+            additionalModelTypeAnnotations: '@lombok.Data @lombok.AllArgsConstructor @lombok.Builder',
+            useJakartaEe                  : 'true',
+            useSpringBoot3: 'true'
+    ]
+    generateApiDocumentation = false
+    generateApiTests = false
+    generateModelTests = false
+    typeMappings = [
+            "Date": "java.time.LocalDateTime"
+    ]
+    importMappings = [
+            "LocalDateTime": "java.time.LocalDateTime"
+    ]
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs += "${projectDir}/src/main/generated/openapi"
+        }
+    }
+}
+
+tasks.named('compileJava') {
+    dependsOn tasks.openApiGenerate
 }

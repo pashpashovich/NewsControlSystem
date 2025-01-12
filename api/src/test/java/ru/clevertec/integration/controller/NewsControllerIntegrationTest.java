@@ -11,8 +11,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import ru.clevertec.cache.Cache;
+import ru.clevertec.domain.News;
+
+import java.util.UUID;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -25,11 +31,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles(profiles = "test")
 @AutoConfigureWireMock(port = 8082)
 class NewsControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
+    @MockitoBean
+    private Cache<UUID, News> cache;
 
     @Test
     @WithMockUser(authorities = "JOURNALIST")

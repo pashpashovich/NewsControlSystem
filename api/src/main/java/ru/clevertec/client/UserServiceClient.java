@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import ru.clevertec.api.ApiResponse;
 import ru.clevertec.dto.UserDetailsDto;
 
-@FeignClient(name = "user-service", url = "http://localhost:8085")
+@FeignClient(name = "user-service", url = "${feign.user-service.url}")
 public interface UserServiceClient {
     @GetMapping("/users/{username}")
     ResponseEntity<ApiResponse<UserDetailsDto>> getUserByUsername(@PathVariable("username") String username);

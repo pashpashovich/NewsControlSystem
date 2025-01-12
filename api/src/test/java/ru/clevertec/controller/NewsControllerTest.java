@@ -11,10 +11,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.clevertec.dto.CommentDto;
-import ru.clevertec.dto.NewsCreateRequest;
-import ru.clevertec.dto.NewsDto;
-import ru.clevertec.dto.NewsWithCommentsDto;
+import ru.clevertec.domain.CommentFromDto;
+import ru.clevertec.domain.NewsCreateRequestDomain;
+import ru.clevertec.domain.NewsFromDto;
+import ru.clevertec.domain.NewsWithCommentsFromDto;
 import ru.clevertec.service.NewsService;
 
 import java.util.List;
@@ -59,7 +59,7 @@ class NewsControllerTest {
     @WithMockUser()
     void shouldReturnNewsById() throws Exception {
         UUID newsId = UUID.randomUUID();
-        NewsDto mockNews = NewsDto.builder()
+        NewsFromDto mockNews = NewsFromDto.builder()
                 .title("Title")
                 .text("Text")
                 .build();
@@ -78,7 +78,7 @@ class NewsControllerTest {
     @WithMockUser()
     void shouldReturnNewsWithComments() throws Exception {
         UUID newsId = UUID.randomUUID();
-        NewsWithCommentsDto mockNewsWithComments = NewsWithCommentsDto.builder()
+        NewsWithCommentsFromDto mockNewsWithComments = NewsWithCommentsFromDto.builder()
                 .title("Title")
                 .text("Text")
                 .comments(List.of())
@@ -101,7 +101,7 @@ class NewsControllerTest {
     void shouldReturnExactComment() throws Exception {
         UUID newsId = UUID.randomUUID();
         UUID commentId = UUID.randomUUID();
-        CommentDto mockComment = CommentDto.builder()
+        CommentFromDto mockComment = CommentFromDto.builder()
                 .text("Comment Text")
                 .build();
 
@@ -118,9 +118,9 @@ class NewsControllerTest {
     @Test
     @WithMockUser()
     void shouldSearchNews() throws Exception {
-        List<NewsDto> mockSearchResults = List.of(
-                NewsDto.builder().title("Title 1").text("Text 1").build(),
-                NewsDto.builder().title("Title 2").text("Text 2").build()
+        List<NewsFromDto> mockSearchResults = List.of(
+                NewsFromDto.builder().title("Title 1").text("Text 1").build(),
+                NewsFromDto.builder().title("Title 2").text("Text 2").build()
         );
 
         when(newsService.searchNews("query")).thenReturn(mockSearchResults);
@@ -139,11 +139,11 @@ class NewsControllerTest {
     @Test
     @WithMockUser(authorities = "JOURNALIST")
     void shouldCreateNews() throws Exception {
-        NewsDto mockNews = NewsDto.builder()
+        NewsFromDto mockNews = NewsFromDto.builder()
                 .title("Created Title")
                 .text("Created Text")
                 .build();
-        when(newsService.createNews(any(NewsCreateRequest.class))).thenReturn(mockNews);
+        when(newsService.createNews(any(NewsCreateRequestDomain.class))).thenReturn(mockNews);
         mockMvc.perform(post("/news")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -162,12 +162,12 @@ class NewsControllerTest {
     @WithMockUser(authorities = "JOURNALIST")
     void shouldUpdateNews() throws Exception {
         UUID newsId = UUID.randomUUID();
-        NewsDto updatedNews = NewsDto.builder()
+        NewsFromDto updatedNews = NewsFromDto.builder()
                 .title("Updated Title")
                 .text("Updated Text")
                 .build();
 
-        when(newsService.updateNews(eq(newsId), any(NewsCreateRequest.class))).thenReturn(updatedNews);
+        when(newsService.updateNews(eq(newsId), any(NewsCreateRequestDomain.class))).thenReturn(updatedNews);
 
         mockMvc.perform(put("/news/{newsId}", newsId)
                         .with(csrf())
