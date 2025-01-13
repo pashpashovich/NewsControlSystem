@@ -8,9 +8,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import ru.clevertec.domain.CommentFromDto;
 import ru.clevertec.domain.NewsCreateRequestDomain;
 import ru.clevertec.domain.NewsFromDto;
@@ -33,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@ActiveProfiles("test")
+@Testcontainers
 class NewsControllerTest {
 
     @Autowired
@@ -42,11 +46,26 @@ class NewsControllerTest {
     @MockitoBean
     private NewsService newsService;
 
+    @Container
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15.3")
+            .withDatabaseName("test")
+            .withUsername("user")
+            .withPassword("password");
+
+    @DynamicPropertySource
+    static void databaseProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgres::getJdbcUrl);
+        registry.add("spring.datasource.username", postgres::getUsername);
+        registry.add("spring.datasource.password", postgres::getPassword);
+    }
+
     @Test
     @WithMockUser()
     void shouldReturnAllNews() throws Exception {
+        // given
         when(newsService.getAllNews(any())).thenReturn(Page.empty());
-
+        //when
+        //then
         mockMvc.perform(get("/news")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -58,13 +77,15 @@ class NewsControllerTest {
     @Test
     @WithMockUser()
     void shouldReturnNewsById() throws Exception {
+        // given
         UUID newsId = UUID.randomUUID();
         NewsFromDto mockNews = NewsFromDto.builder()
                 .title("Title")
                 .text("Text")
                 .build();
         when(newsService.getNewsById(newsId)).thenReturn(mockNews);
-
+        //when
+        //then
         mockMvc.perform(get("/news/{newsId}", newsId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -77,6 +98,7 @@ class NewsControllerTest {
     @Test
     @WithMockUser()
     void shouldReturnNewsWithComments() throws Exception {
+        // given
         UUID newsId = UUID.randomUUID();
         NewsWithCommentsFromDto mockNewsWithComments = NewsWithCommentsFromDto.builder()
                 .title("Title")
@@ -85,7 +107,8 @@ class NewsControllerTest {
                 .build();
 
         when(newsService.getNewsWithComments(newsId)).thenReturn(mockNewsWithComments);
-
+        //when
+        //then
         mockMvc.perform(get("/news/{newsId}/comments", newsId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -97,8 +120,9 @@ class NewsControllerTest {
     }
 
     @Test
-    @WithMockUser()
+    @WithMockUser(authorities = "ADMIN")
     void shouldReturnExactComment() throws Exception {
+        // given
         UUID newsId = UUID.randomUUID();
         UUID commentId = UUID.randomUUID();
         CommentFromDto mockComment = CommentFromDto.builder()
@@ -106,7 +130,8 @@ class NewsControllerTest {
                 .build();
 
         when(newsService.getExactComment(newsId, commentId)).thenReturn(mockComment);
-
+        //when
+        //then
         mockMvc.perform(get("/news/{newsId}/comments/{commentId}", newsId, commentId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -118,13 +143,15 @@ class NewsControllerTest {
     @Test
     @WithMockUser()
     void shouldSearchNews() throws Exception {
+        // given
         List<NewsFromDto> mockSearchResults = List.of(
                 NewsFromDto.builder().title("Title 1").text("Text 1").build(),
                 NewsFromDto.builder().title("Title 2").text("Text 2").build()
         );
 
         when(newsService.searchNews("query")).thenReturn(mockSearchResults);
-
+        //when
+        //then
         mockMvc.perform(get("/news/search")
                         .param("query", "query")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -139,11 +166,14 @@ class NewsControllerTest {
     @Test
     @WithMockUser(authorities = "JOURNALIST")
     void shouldCreateNews() throws Exception {
+        // given
         NewsFromDto mockNews = NewsFromDto.builder()
                 .title("Created Title")
                 .text("Created Text")
                 .build();
         when(newsService.createNews(any(NewsCreateRequestDomain.class))).thenReturn(mockNews);
+        //when
+        //then
         mockMvc.perform(post("/news")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -161,6 +191,7 @@ class NewsControllerTest {
     @Test
     @WithMockUser(authorities = "JOURNALIST")
     void shouldUpdateNews() throws Exception {
+        // given
         UUID newsId = UUID.randomUUID();
         NewsFromDto updatedNews = NewsFromDto.builder()
                 .title("Updated Title")
@@ -168,7 +199,8 @@ class NewsControllerTest {
                 .build();
 
         when(newsService.updateNews(eq(newsId), any(NewsCreateRequestDomain.class))).thenReturn(updatedNews);
-
+        //when
+        //then
         mockMvc.perform(put("/news/{newsId}", newsId)
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -186,8 +218,10 @@ class NewsControllerTest {
     @Test
     @WithMockUser(authorities = "JOURNALIST")
     void shouldDeleteNews() throws Exception {
+        // given
         UUID newsId = UUID.randomUUID();
-
+        //when
+        //then
         mockMvc.perform(delete("/news/{newsId}", newsId)
                         .with(csrf()))
                 .andExpect(status().isNoContent());
