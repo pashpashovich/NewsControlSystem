@@ -64,10 +64,6 @@ subprojects {
         options.encoding = 'UTF-8'
     }
 
-    tasks.withType(Test) {
-        enabled = false
-    }
-
     dependencies {
         runtimeOnly "io.jsonwebtoken:jjwt-impl:${jsonwebtokenVersion}"
         runtimeOnly "io.jsonwebtoken:jjwt-jackson:${jsonwebtokenVersion}"

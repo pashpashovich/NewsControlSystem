@@ -18,6 +18,7 @@ News Control System
 - Liquibase
 - Redis
 - JUnit, Mockito
+- OpenApi Generator
 
 ## Инструкция по развертыванию
 
@@ -33,7 +34,7 @@ News Control System
 ./gradlew clean build
 ```
 Стартер будет сохранен в локальном Maven репозитории.
-5. Скачайте или склонируйте текущий репозиторий и соберите проект.
+5. Скачайте или склонируйте текущий репозиторий и соберите проект. 
 6. Выполните команду:
 ```
 docker-compose up --build   
@@ -50,7 +51,9 @@ docker-compose up --build
 ```
 11. Для тестирования API используйте следующие ссылки со Swagger UI:
 http://localhost:8081/swagger-ui/index.html
+
 http://localhost:8082/swagger-ui/index.html
+
 http://localhost:8083/swagger-ui/index.html
 
 ## Примечания
